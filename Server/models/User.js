@@ -17,7 +17,8 @@ const userSchema = new schema({
     },
     email:{
         type:String,
-        required: true
+        required: true,
+        unique:true
     },
     age:{
         type:Number,
