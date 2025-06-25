@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import '../../../styles/SignUp.css'
+import '../../../styles/SignUp.css';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function SignUp() {
   const [name, setName] = useState('');
@@ -9,6 +11,7 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   const handleDobChange = (e) => {
     const birthDate = new Date(e.target.value);
@@ -35,10 +38,21 @@ export default function SignUp() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-      alert(`Welcome, ${name}! Age: ${age}`);
+      try {
+        await axios.post('http://localhost:3000/auth/user-reg', {
+          name,
+          email,
+          age,
+          password,
+        });
+        alert('Signup successful!');
+        navigate('/signin');
+      } catch (error) {
+        alert(error.response?.data?.error || 'Signup failed');
+      }
     }
   };
 
@@ -47,7 +61,6 @@ export default function SignUp() {
       <form className="signup-form" onSubmit={handleSubmit} noValidate>
         <h2>CREATE ACCOUNT</h2>
 
-        
         <input
           type="text"
           placeholder="Username"
@@ -65,14 +78,13 @@ export default function SignUp() {
         <span className="error">{errors.email}</span>
 
         <input
-        id="dob"
-        type="date"
-        value={dob}
-        placeholder="Date of Birth"
-        onChange={handleDobChange}
+          id="dob"
+          type="date"
+          value={dob}
+          placeholder="Date of Birth"
+          onChange={handleDobChange}
         />
         <span className="error">{errors.dob}</span>
-    
 
         <input
           type="password"
@@ -92,7 +104,7 @@ export default function SignUp() {
 
         <button type="submit">Sign Up</button>
 
-        <a href="">Already have an account?</a>
+        <Link to="/signin">Already have an account?</Link>
       </form>
     </div>
   );

@@ -1,0 +1,421 @@
+/* AuctionDashboard.module.css */
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+.header {
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #e5e7eb;
+}
+.headerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.logoIcon {
+  width: 40px;
+  height: 40px;
+  background-color: #ef4444;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logoText {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #1f2937;
+}
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.searchContainer {
+  position: relative;
+}
+.searchInput {
+  padding-left: 40px;
+  padding-right: 16px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.2s;
+  font-size: 14px;
+}
+.searchInput:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+}
+.notificationBtn {
+  position: relative;
+  padding: 8px;
+  color: #6b7280;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: color 0.2s;
+}
+.notificationBtn:hover {
+  color: #ef4444;
+}
+.notificationBadge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  background-color: #ef4444;
+  border-radius: 50%;
+}
+.avatar {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mainContainer {
+  display: flex;
+}
+.sidebar {
+  width: 256px;
+  background-color: white;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+  min-height: calc(100vh - 73px);
+}
+.sidebarContent {
+  padding: 24px;
+}
+.profileSection {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.profileAvatar {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.profileInfo {
+  flex: 1;
+}
+.profileName {
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+.profileProgress {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background-color: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+.progressFill {
+  height: 100%;
+  background-color: #10b981;
+  border-radius: 4px;
+  width: 75%;
+  transition: width 1s ease;
+}
+.progressText {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+.navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  background-color: transparent;
+  width: 100%;
+  text-align: left;
+  color: #6b7280;
+}
+.navItemActive {
+  background-color: #fef2f2;
+  color: #dc2626;
+  border-left: 4px solid #dc2626;
+}
+.navItem:hover:not(.navItemActive) {
+  background-color: #f9fafb;
+  color: #1f2937;
+}
+.badge {
+  width: 20px;
+  height: 20px;
+  background-color: #ef4444;
+  color: white;
+  font-size: 0.75rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+}
+.statusDot {
+  width: 8px;
+  height: 8px;
+  background-color: #ef4444;
+  border-radius: 50%;
+  margin-left: auto;
+}
+.checkIcon {
+  color: #10b981;
+  margin-left: auto;
+}
+.main {
+  flex: 1;
+  padding: 24px;
+}
+.welcomeSection {
+  margin-bottom: 32px;
+}
+.welcomeTitle {
+  font-size: 1.875rem;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+.welcomeDate {
+  color: #6b7280;
+}
+.gridContainer {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.cardTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 16px;
+}
+.profileCompleteCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.completePercent {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #10b981;
+}
+.fullProgressBar {
+  width: 100%;
+  height: 12px;
+  background-color: #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.fullProgressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+  border-radius: 6px;
+  width: 100%;
+  transition: width 1s ease;
+}
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+.tableContainer {
+  overflow-x: auto;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.tableHeader {
+  border-bottom: 1px solid #e5e7eb;
+}
+.tableHeaderCell {
+  text-align: left;
+  padding: 12px 16px;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.875rem;
+}
+.tableRow {
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.2s;
+}
+.tableRow:hover {
+  background-color: #f9fafb;
+}
+.tableCell {
+  padding: 16px;
+  font-size: 0.875rem;
+}
+.houseName {
+  font-weight: 500;
+  color: #1f2937;
+}
+.amount {
+  font-weight: 600;
+  color: #1f2937;
+}
+.statusBadge {
+  padding: 4px 12px;
+  background-color: #d1fae5;
+  color: #065f46;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.viewLink {
+  color: #dc2626;
+  text-decoration: none;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.viewLink:hover {
+  color: #b91c1c;
+}
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.auctionCard {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  transition: box-shadow 0.2s;
+}
+.auctionCard:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.auctionContent {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.auctionImage {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #60a5fa 0%, #a855f7 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.auctionDetails {
+  flex: 1;
+}
+.auctionTitle {
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 8px;
+  font-size: 0.875rem;
+}
+.auctionInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+.auctionInfoRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.auctionFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+.bidAmount {
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: #dc2626;
+}
+.viewDetailsBtn {
+  background-color: #ef4444;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.viewDetailsBtn:hover {
+  background-color: #dc2626;
+} 
+.addBidBtn {
+  background-color: #ef4444;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 1.00rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.addBidBtn:hover {
+  background-color: #dc2626;
+} 
