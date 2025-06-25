@@ -26,8 +26,8 @@ app.use('/auth',protectedRoute);
 app.use('/auth',logoutRoute);
 
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("Connected to MongoDB"))
-  .catch(err => console.log(err));
+.then(() => console.log("Connected to MongoDB"))
+.catch(err => console.log(err));
 
 app.get('/',(req,res)=>{
     res.send("Hello");
