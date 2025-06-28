@@ -6,27 +6,22 @@ import Landing from './components/pages/Landing'
 import AuctionDashboard from './components/pages/dashboard/AuctionDashboard'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import RequireAuth from './utils/RequireAuth'
+import AddBidScreen from './components/pages/addBidScreen/AddBidScreen'
+import SideMenu from './components/sideMenuBar/SideMenu'
 
-/*function App() {
+function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
-        <Route path="/dashboard" element={<RequireAuth><AuctionDashboard/></RequireAuth>}/>
+        <Route path="/sidemenu" element={<RequireAuth><SideMenu/></RequireAuth>}/>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   )
-}*/
-
-function App() {
-  return (
-
-    <AuctionDashboard/>
-        
-  )
 }
+
 
 export default App

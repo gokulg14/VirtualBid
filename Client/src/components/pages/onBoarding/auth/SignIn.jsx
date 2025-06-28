@@ -27,8 +27,9 @@ export default function SignIn() {
           password,
         });
         localStorage.setItem('token', res.data.token);
+        localStorage.setItem('email',email);
         alert(res.data.message);
-        navigate('/dashboard');
+        navigate('/sidemenu');
       } catch (error) {
         alert(error.response?.data?.error || 'Login failed');
         navigate('/signin');

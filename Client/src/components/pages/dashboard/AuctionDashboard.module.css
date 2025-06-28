@@ -1,4 +1,4 @@
-/* AuctionDashboard.module.css */
+
 .container {
   min-height: 100vh;
   background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
@@ -64,16 +64,18 @@
   transform: translateY(-50%);
   color: #9ca3af;
 }
-.notificationBtn {
-  position: relative;
-  padding: 8px;
-  color: #6b7280;
-  border: none;
-  background: none;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: color 0.2s;
-}
+
+.notificationButton{
+            position: relative;
+            padding: 0.5rem;
+            color: #6b7280;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+
 .notificationBtn:hover {
   color: #ef4444;
 }

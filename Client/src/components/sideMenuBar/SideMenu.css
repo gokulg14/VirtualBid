@@ -1,0 +1,159 @@
+/* Header Component Styles */
+.header {
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.headerContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logoIcon {
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: #ef4444;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.logoText {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #1f2937;
+}
+
+.headerRight {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.searchContainer {
+    position: relative;
+}
+
+.searchInput {
+    padding-left: 2.5rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    outline: none;
+    transition: all 0.2s;
+    font-size: 0.875rem;
+}
+
+.searchInput:focus {
+    border-color: #ef4444;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.notificationButton {
+    position: relative;
+    padding: 0.5rem;
+    color: #6b7280;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.notificationButton:hover {
+    color: #ef4444;
+}
+
+.notificationBadge {
+    position: absolute;
+    top: -0.25rem;
+    right: -0.25rem;
+    width: 0.75rem;
+    height: 0.75rem;
+    background-color: #ef4444;
+    border-radius: 50%;
+}
+
+.avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+/* DefaultScreen Component Styles */
+.mainContent {
+    flex: 1;
+    padding: 1.5rem;
+}
+
+.welcomeHeader {
+    margin-bottom: 2rem;
+}
+
+.welcomeTitle {
+    font-size: 1.875rem;
+    font-weight: bold;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.placeholderCard {
+    background-color: #ffffff;
+    border-radius: 0.75rem;
+    padding: 3rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.placeholderText {
+    font-size: 1.125rem;
+    color: #6b7280;
+    margin-bottom: 1rem;
+}
+
+.placeholderSubtext {
+    color: #9ca3af;
+}
+
+/* Main App Component Styles */
+.container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.mainLayout {
+    display: flex;
+}
+
+/* Sidebar item span styles */
+.navItemSpan {
+    flex: 1;
+    text-align: left;
+} 

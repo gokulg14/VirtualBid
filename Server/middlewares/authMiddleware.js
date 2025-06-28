@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
+const Login = require('../models/Login');
+const User = require('../models/User');
 
-const authMiddleware = (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (authHeader && authHeader.startsWith('Bearer ')) {
@@ -8,7 +10,20 @@ const authMiddleware = (req, res, next) => {
 
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            req.userId = decoded.id;
+            
+            // Get the login record to find the associated user
+            const loginRecord = await Login.findOne({ loginId: decoded.id });
+            if (!loginRecord) {
+                return res.status(401).json({ error: "Invalid token" });
+            }
+
+            // Get the user record
+            const user = await User.findOne({ email: loginRecord.email });
+            if (!user) {
+                return res.status(401).json({ error: "User not found" });
+            }
+
+            req.userId = user._id; // Set the MongoDB ObjectId of the user
             next();
         } catch (error) {
             return res.status(401).json({ error: "Invalid token" });
