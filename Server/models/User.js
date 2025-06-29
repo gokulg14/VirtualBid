@@ -23,6 +23,14 @@ const userSchema = new schema({
     age:{
         type:Number,
         required:true
+    },
+    phone:{
+        type:String,
+        required: true
+    },
+    profilePicture:{
+        type:String,
+        default: null
     }
 },{timestamps:true})
 

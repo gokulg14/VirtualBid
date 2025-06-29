@@ -1,27 +1,23 @@
-import { useState } from 'react'
 import './App.css'
-import SignUp from './components/pages/onBoarding/auth/SignUp'
-import SignIn from './components/pages/onBoarding/auth/SignIn'
 import Landing from './components/pages/Landing'
-import AuctionDashboard from './components/pages/dashboard/AuctionDashboard'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import RequireAuth from './utils/RequireAuth'
-import AddBidScreen from './components/pages/addBidScreen/AddBidScreen'
 import SideMenu from './components/sideMenuBar/SideMenu'
+import AuthSystem from './components/pages/onBoarding/auth/AuthSystem'
+import ProfileScreen from './components/pages/profile/ProfileScreen';
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Landing />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signin" element={<AuthSystem />} />
+        <Route path="/signup" element={<AuthSystem />} />
         <Route path="/sidemenu" element={<RequireAuth><SideMenu/></RequireAuth>}/>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   )
 }
-
 
 export default App

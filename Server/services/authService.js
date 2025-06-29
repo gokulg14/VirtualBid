@@ -6,7 +6,7 @@ const Login = require('../models/Login');
 
 const generateToken = require('../utils/generateToken');
 
-const createUser = async({name,email,age,password}) =>{
+const createUser = async({name,email,age,phone,password}) =>{
 
     const existingUser = await Login.findOne({ email });
     if (existingUser) {
@@ -15,7 +15,7 @@ const createUser = async({name,email,age,password}) =>{
 
     const hashedpass = await bcrypt.hash(password,10);
 
-    await User.create({name,email,age});
+    await User.create({name,email,age,phone});
     await Login.create({email,password:hashedpass,isActive:false});
 
     return "User created Successfully"

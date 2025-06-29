@@ -1,4 +1,5 @@
 const { createBid } = require('../services/bidService');
+const { getUserCreatedAuctions } = require('../services/bidService');
 const Bid = require('../models/Bid');
 const User = require('../models/User');
 const BidHistory = require('../models/BidHistory');
@@ -102,6 +103,37 @@ const getEndBids = async (req, res) => {
   }
 };
 
+const getUpcomingBids = async (req, res) => {
+  try {
+    const upcomingBids = await Bid.find({ status: 'upcoming' })
+      .populate('createdBy', 'name email')
+      .populate('highestBidder', 'name email')
+      .sort({ startTime: 1 });
+    res.status(200).json(upcomingBids);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getBidHistory = async (req, res) => {
+  try {
+    const { bidId } = req.params;
+    
+    if (!bidId) {
+      return res.status(400).json({ error: "Bid ID is required" });
+    }
+
+    const bidHistory = await BidHistory.find({ bidId })
+      .populate('bidder', 'name email')
+      .sort({ createdAt: -1 });
+
+    res.status(200).json(bidHistory);
+  } catch (error) {
+    console.error('Error fetching bid history:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 const placeBid = async (req, res) => {
   try {
     const { bidId, bidAmount } = req.body;
@@ -120,9 +152,23 @@ const placeBid = async (req, res) => {
       return res.status(400).json({ error: "Bid is not active" });
     }
 
+    // Prevent auction creator from bidding on their own item
+    if (bid.createdBy.toString() === req.userId.toString()) {
+      return res.status(400).json({ error: "You cannot bid on your own auction item" });
+    }
+
     // Check if bid amount is higher than current highest bid
     if (parseFloat(bidAmount) <= bid.highestBid) {
       return res.status(400).json({ error: "Bid amount must be higher than current highest bid" });
+    }
+
+    // Check minimum bid increment (10% of current bid or $10, whichever is higher)
+    const currentBid = bid.highestBid || bid.startingBid;
+    const minIncrement = Math.max(currentBid * 0.1, 10);
+    if (parseFloat(bidAmount) < currentBid + minIncrement) {
+      return res.status(400).json({ 
+        error: `Minimum bid increment is $${minIncrement.toFixed(2)}. Your bid must be at least $${(currentBid + minIncrement).toFixed(2)}` 
+      });
     }
 
     // Record the bid in history
@@ -150,4 +196,26 @@ const placeBid = async (req, res) => {
   }
 };
 
-module.exports = { addBid, getAllBids, getActiveBids, getEndBids, placeBid };
+const getUserCreatedAuctionsController = async (req, res) => {
+  try {
+    const email = req.params.email;
+    
+    const auctions = await getUserCreatedAuctions(email);
+    
+    res.status(200).json({ auctions });
+  } catch (error) {
+    console.error('Error fetching user created auctions:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = {
+  addBid,
+  getAllBids,
+  getActiveBids,
+  getEndBids,
+  getUpcomingBids,
+  getBidHistory,
+  placeBid,
+  getUserCreatedAuctionsController
+};

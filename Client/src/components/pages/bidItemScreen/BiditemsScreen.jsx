@@ -9,26 +9,44 @@ const BidItemsScreen = () => {
   const [bidAmount, setBidAmount] = useState('');
   const [showBidModal, setShowBidModal] = useState(false);
   const [placingBid, setPlacingBid] = useState(false);
+  const [currentUserEmail, setCurrentUserEmail] = useState('');
+  const [showBidHistory, setShowBidHistory] = useState(false);
+  const [bidHistory, setBidHistory] = useState([]);
+  const [selectedItemForHistory, setSelectedItemForHistory] = useState(null);
 
   // Fetch bid items from backend
   useEffect(() => {
     fetchBidItems();
+    // Get current user email for comparison
+    setCurrentUserEmail(localStorage.getItem('email') || '');
   }, []);
 
   const fetchBidItems = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:3000/bid/all-bids');
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+      
+      const response = await fetch('http://localhost:3000/bid/all-bids', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       
       if (!response.ok) {
-        throw new Error('Failed to fetch bid items');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP ${response.status}: Failed to fetch bid items`);
       }
       
       const data = await response.json();
+      console.log('Fetched bid items:', data); // Debug log
       setBidItems(data);
     } catch (error) {
       console.error('Error fetching bid items:', error);
-      alert('Failed to load bid items. Please try again.');
+      alert(`Failed to load bid items: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -72,13 +90,18 @@ const BidItemsScreen = () => {
   );
 
   const handleBidClick = (item) => {
-    if (item.status !== 'active') {
-      alert('This auction is not active for bidding.');
+    if (!canBid(item)) {
+      if (isAuctionCreator(item)) {
+        alert('You cannot bid on your own auction item.');
+      } else {
+        alert('This auction is not active for bidding.');
+      }
       return;
     }
     
     setSelectedItem(item);
-    setBidAmount((item.highestBid + 10).toString());
+    const currentBid = item.highestBid || item.startingBid || 0;
+    setBidAmount((currentBid + 10).toString());
     setShowBidModal(true);
   };
 
@@ -91,7 +114,7 @@ const BidItemsScreen = () => {
       return;
     }
 
-    if (parseFloat(bidAmount) <= selectedItem.highestBid) {
+    if (parseFloat(bidAmount) <= (selectedItem.highestBid || selectedItem.startingBid || 0)) {
       alert('Bid amount must be higher than current highest bid');
       return;
     }
@@ -148,6 +171,41 @@ const BidItemsScreen = () => {
       case 'pending': return '#f59e0b';
       default: return '#6b7280';
     }
+  };
+
+  const isAuctionCreator = (item) => {
+    return item.createdBy?.email === currentUserEmail;
+  };
+
+  const canBid = (item) => {
+    return item.status === 'active' && !isAuctionCreator(item);
+  };
+
+  const fetchBidHistory = async (bidId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:3000/bid/bid-history/${bidId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch bid history');
+      }
+      
+      const data = await response.json();
+      setBidHistory(data);
+    } catch (error) {
+      console.error('Error fetching bid history:', error);
+      alert('Failed to load bid history');
+    }
+  };
+
+  const handleViewBidHistory = (item) => {
+    setSelectedItemForHistory(item);
+    fetchBidHistory(item._id);
+    setShowBidHistory(true);
   };
 
   if (loading) {
@@ -344,6 +402,21 @@ const BidItemsScreen = () => {
               }}>
                 {item.status}
               </div>
+              {isAuctionCreator(item) && (
+                <div style={{
+                  position: 'absolute',
+                  top: '12px',
+                  left: '12px',
+                  padding: '4px 8px',
+                  backgroundColor: '#8b5cf6',
+                  color: 'white',
+                  borderRadius: '4px',
+                  fontSize: '12px',
+                  fontWeight: '500'
+                }}>
+                  Your Item
+                </div>
+              )}
             </div>
 
             {/* Item Details */}
@@ -406,7 +479,7 @@ const BidItemsScreen = () => {
                     alignItems: 'center'
                   }}>
                     <DollarSign size={18} style={{ marginRight: '0.125rem' }} />
-                    {item.highestBid.toLocaleString()}
+                    {(item.highestBid || item.startingBid || 0).toLocaleString()}
                   </p>
                 </div>
                 <div style={{ textAlign: 'right' }}>
@@ -422,31 +495,60 @@ const BidItemsScreen = () => {
               {/* Bid Button */}
               <button
                 onClick={() => handleBidClick(item)}
-                disabled={item.status !== 'active'}
+                disabled={!canBid(item)}
                 style={{
                   width: '100%',
                   padding: '0.75rem',
-                  backgroundColor: item.status === 'active' ? '#3b82f6' : '#9ca3af',
+                  backgroundColor: canBid(item) ? '#3b82f6' : '#9ca3af',
                   color: 'white',
                   border: 'none',
                   borderRadius: '0.5rem',
                   fontSize: '1rem',
                   fontWeight: '500',
-                  cursor: item.status === 'active' ? 'pointer' : 'not-allowed',
-                  transition: 'background-color 0.2s'
+                  cursor: canBid(item) ? 'pointer' : 'not-allowed',
+                  transition: 'background-color 0.2s',
+                  marginBottom: '0.5rem'
                 }}
                 onMouseEnter={(e) => {
-                  if (item.status === 'active') {
+                  if (canBid(item)) {
                     e.target.style.backgroundColor = '#2563eb';
                   }
                 }}
                 onMouseLeave={(e) => {
-                  if (item.status === 'active') {
+                  if (canBid(item)) {
                     e.target.style.backgroundColor = '#3b82f6';
                   }
                 }}
               >
-                {item.status === 'active' ? 'Place Bid' : 'Not Active'}
+                {isAuctionCreator(item) ? 'Your Auction' : 
+                 item.status === 'active' ? 'Place Bid' : 'Not Active'}
+              </button>
+
+              {/* View History Button */}
+              <button
+                onClick={() => handleViewBidHistory(item)}
+                style={{
+                  width: '100%',
+                  padding: '0.5rem',
+                  backgroundColor: 'transparent',
+                  color: '#6b7280',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '0.5rem',
+                  fontSize: '0.875rem',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = '#f3f4f6';
+                  e.target.style.borderColor = '#9ca3af';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = 'transparent';
+                  e.target.style.borderColor = '#d1d5db';
+                }}
+              >
+                View Bid History ({item.totalBids || 0})
               </button>
             </div>
           </div>
@@ -489,7 +591,7 @@ const BidItemsScreen = () => {
                 {selectedItem?.title}
               </h3>
               <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>
-                Current highest bid: ${selectedItem?.highestBid.toLocaleString()}
+                Current highest bid: ${(selectedItem?.highestBid || selectedItem?.startingBid || 0).toLocaleString()}
               </p>
             </div>
 
@@ -507,7 +609,7 @@ const BidItemsScreen = () => {
                 type="number"
                 value={bidAmount}
                 onChange={(e) => setBidAmount(e.target.value)}
-                min={selectedItem?.highestBid + 1}
+                min={(selectedItem?.highestBid || selectedItem?.startingBid || 0) + 1}
                 style={{
                   width: '100%',
                   padding: '0.75rem',
@@ -538,21 +640,130 @@ const BidItemsScreen = () => {
               </button>
               <button
                 onClick={handlePlaceBid}
-                disabled={placingBid || parseFloat(bidAmount) <= selectedItem?.highestBid}
+                disabled={placingBid || parseFloat(bidAmount) <= (selectedItem?.highestBid || selectedItem?.startingBid || 0)}
                 style={{
                   flex: 1,
                   padding: '0.75rem',
-                  backgroundColor: (placingBid || parseFloat(bidAmount) <= selectedItem?.highestBid) ? '#d1d5db' : '#059669',
+                  backgroundColor: (placingBid || parseFloat(bidAmount) <= (selectedItem?.highestBid || selectedItem?.startingBid || 0)) ? '#d1d5db' : '#059669',
                   color: 'white',
                   border: 'none',
                   borderRadius: '0.5rem',
                   fontSize: '1rem',
-                  cursor: (placingBid || parseFloat(bidAmount) <= selectedItem?.highestBid) ? 'not-allowed' : 'pointer'
+                  cursor: (placingBid || parseFloat(bidAmount) <= (selectedItem?.highestBid || selectedItem?.startingBid || 0)) ? 'not-allowed' : 'pointer'
                 }}
               >
                 {placingBid ? 'Placing Bid...' : 'Place Bid'}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Bid History Modal */}
+      {showBidHistory && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            backgroundColor: 'white',
+            padding: '2rem',
+            borderRadius: '0.75rem',
+            width: '90%',
+            maxWidth: '600px',
+            maxHeight: '80vh',
+            overflow: 'auto',
+            boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <h2 style={{ 
+                fontSize: '1.5rem', 
+                fontWeight: '600', 
+                color: '#1f2937'
+              }}>
+                Bid History
+              </h2>
+              <button
+                onClick={() => setShowBidHistory(false)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '1.5rem',
+                  cursor: 'pointer',
+                  color: '#6b7280'
+                }}
+              >
+                ×
+              </button>
+            </div>
+            
+            <div style={{ marginBottom: '1.5rem' }}>
+              <h3 style={{ fontSize: '1.125rem', color: '#1f2937', marginBottom: '0.5rem' }}>
+                {selectedItemForHistory?.title}
+              </h3>
+              <p style={{ color: '#6b7280', fontSize: '0.875rem' }}>
+                Total bids: {bidHistory.length}
+              </p>
+            </div>
+
+            {bidHistory.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '2rem', color: '#6b7280' }}>
+                <p>No bids placed yet</p>
+              </div>
+            ) : (
+              <div style={{ maxHeight: '400px', overflow: 'auto' }}>
+                {bidHistory.map((bid, index) => (
+                  <div key={bid._id} style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '1rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '0.5rem',
+                    marginBottom: '0.5rem',
+                    backgroundColor: index === 0 ? '#f0f9ff' : 'white'
+                  }}>
+                    <div>
+                      <p style={{ fontWeight: '500', color: '#1f2937', marginBottom: '0.25rem' }}>
+                        {bid.bidder?.name || 'Unknown Bidder'}
+                      </p>
+                      <p style={{ fontSize: '0.875rem', color: '#6b7280' }}>
+                        {new Date(bid.createdAt).toLocaleString()}
+                      </p>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                      <p style={{ 
+                        fontSize: '1.125rem', 
+                        fontWeight: '600', 
+                        color: '#059669',
+                        marginBottom: '0.25rem'
+                      }}>
+                        ${bid.bidAmount.toLocaleString()}
+                      </p>
+                      {index === 0 && (
+                        <span style={{
+                          fontSize: '0.75rem',
+                          backgroundColor: '#22c55e',
+                          color: 'white',
+                          padding: '0.25rem 0.5rem',
+                          borderRadius: '0.25rem'
+                        }}>
+                          Current Highest
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}

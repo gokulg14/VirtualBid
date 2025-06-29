@@ -13,6 +13,7 @@ import {
     Search,
     Plus,
     LogOut,
+    Gavel,
 } from 'lucide-react';
 import dashboardStyles from '../pages/dashboard/AuctionDashboard.module.css';
 import Dashboard from '../pages/dashboard/AuctionDashboard';
@@ -21,6 +22,8 @@ import './SideMenu.css';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import BidItemsScreen from '../pages/bidItemScreen/BiditemsScreen';
+import ProfileScreen from '../pages/profile/ProfileScreen';
+import AuctionHistoryScreen from '../pages/historyScreen/AuctionHistoryScreen';
 
 
 // Header Component
@@ -60,19 +63,11 @@ const Header = () => {
             <div className="headerContent">
                 <div className="logo">
                     <div className="logoIcon">
-                        <Home size={24} />
+                        <Gavel size={24} />
                     </div>
-                    <h1 className="logoText">Homley CRM</h1>
+                    <h1 className="logoText">Virtual Bid</h1>
                 </div>
                 <div className="headerRight">
-                    <div className="searchContainer">
-                        <Search className="searchIcon" />
-                        <input
-                            type="text"
-                            placeholder="Search auctions..."
-                            className="searchInput"
-                        />
-                    </div>
                     <button className="notificationButton">
                         <Bell size={24} />
                     </button>
@@ -86,19 +81,13 @@ const Header = () => {
 };
 
 // Sidebar Component
-const Sidebar = ({ activeTab, setActiveTab }) => {
+const Sidebar = ({ activeTab, setActiveTab, username, profilePicture, onTabChange }) => {
     const sidebarItems = [
         { id: 'dashboard', icon: Home, label: 'Dashboard' },
         { id: 'add-bid', icon: Plus, label: 'Add New Bid' },
         { id: 'bid-item', icon: FileText, label: 'Live Bids' },
-        { id: 'profile', icon: User, label: 'Profile Verification' },
-        { id: 'select', icon: CheckCircle, label: 'Select Type' },
-        { id: 'documents', icon: Upload, label: 'Documents' },
-        { id: 'driving', icon: Car, label: 'Driving License' },
-        { id: 'deposit', icon: DollarSign, label: 'Deposit Authorization' },
-        { id: 'terms', icon: FileText, label: 'Terms & Conditions' },
-        { id: 'bidding', icon: TrendingUp, label: 'Bidding History' },
-        { id: 'settings', icon: Settings, label: 'Settings' }
+        { id: 'profile', icon: User, label: 'Profile' },
+        { id: 'history', icon: TrendingUp, label: 'Bidding History' },
     ];
 
     return (
@@ -106,15 +95,24 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
             <div className={dashboardStyles.sidebarContent}>
                 <div className={dashboardStyles.profileSection}>
                     <div className={dashboardStyles.profileAvatar}>
-                        <User size={32} color="white" />
+                        {profilePicture ? (
+                            <img 
+                                src={`http://localhost:3000/${profilePicture}`} 
+                                alt="Profile" 
+                                style={{ 
+                                    width: '100%', 
+                                    height: '100%', 
+                                    borderRadius: '50%',
+                                    objectFit: 'cover',
+                                    objectPosition: 'center'
+                                }} 
+                            />
+                        ) : (
+                            <User size={32} color="white" />
+                        )}
                     </div>
                     <div className={dashboardStyles.profileInfo}>
-                        <div className={dashboardStyles.profileName}>Shahryar</div>
-                        <div className={dashboardStyles.profileProgress}>75% Completed</div>
-                        <div className={dashboardStyles.progressBar}>
-                            <div className={dashboardStyles.progressFill}></div>
-                        </div>
-                        <div className={dashboardStyles.progressText}>7/7</div>
+                        <div className={dashboardStyles.profileName}>{username || 'Loading...'}</div>
                     </div>
                 </div>
 
@@ -122,7 +120,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
                     {sidebarItems.map((item) => (
                         <button
                             key={item.id}
-                            onClick={() => setActiveTab(item.id)}
+                            onClick={() => onTabChange(item.id)}
                             className={
                                 `${dashboardStyles.navItem} ${activeTab === item.id ? dashboardStyles.navItemActive : ''}`
                             }
@@ -186,6 +184,44 @@ const DefaultScreen = ({ tabName }) => {
 // Main App Component
 const SideMenu = () => {
     const [activeTab, setActiveTab] = useState('dashboard');
+    const [username, setUsername] = useState('');
+    const [profilePicture, setProfilePicture] = useState(null);
+
+    const fetchUserInfo = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const email = localStorage.getItem('email');
+            
+            if (token && email) {
+                const response = await axios.get(
+                    `http://localhost:3000/auth/user-info/${email}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+                setUsername(response.data.user.name);
+                setProfilePicture(response.data.user.profilePicture);
+            }
+        } catch (error) {
+            console.error('Error fetching user info:', error);
+            // Set a fallback username if fetch fails
+            setUsername('User');
+        }
+    };
+
+    useEffect(() => {
+        fetchUserInfo();
+    }, []);
+
+    const handleTabChange = (tabId) => {
+        setActiveTab(tabId);
+        // Refresh user info when switching to profile tab to get updated profile picture
+        if (tabId === 'profile') {
+            fetchUserInfo();
+        }
+    };
 
     const renderMainContent = () => {
         switch (activeTab) {
@@ -194,7 +230,11 @@ const SideMenu = () => {
             case 'add-bid':
                 return <AddBidScreen />;
             case 'bid-item':
-                return <BidItemsScreen/>
+                return <BidItemsScreen/>;
+            case 'profile':
+                return <ProfileScreen/>;
+            case 'history':
+                return <AuctionHistoryScreen/>
             default:
                 return <DefaultScreen tabName={activeTab} />;
         }
@@ -204,7 +244,7 @@ const SideMenu = () => {
         <div className="container">
             <Header />
             <div className="mainLayout">
-                <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+                <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} username={username} profilePicture={profilePicture} onTabChange={handleTabChange} />
                 {renderMainContent()}
             </div>
         </div>

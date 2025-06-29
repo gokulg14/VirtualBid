@@ -1,7 +1,7 @@
 const cron = require('node-cron');
 const Bid = require('../models/Bid');
 
-cron.schedule('*/5 * * * *', async () => {
+cron.schedule('*/10 * * * * *', async () => {
   const now = new Date();
   await Bid.updateMany(
     { endTime: { $lt: now } },
