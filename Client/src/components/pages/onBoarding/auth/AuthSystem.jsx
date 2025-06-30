@@ -133,7 +133,6 @@ const AuthSystem = () => {
         };
 
         const response = await axios.post('http://localhost:3000/auth/user-reg', signUpData);
-        alert('Account created successfully!');
         setIsSignUp(false); // Switch to sign in mode
         setFormData({
           username: '',
@@ -157,8 +156,7 @@ const AuthSystem = () => {
         // Store token and email in localStorage
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('email', formData.email);
-        
-        alert('Signed in successfully!');
+      
         navigate('/sidemenu');
       }
     } catch (error) {
@@ -203,14 +201,14 @@ const AuthSystem = () => {
         <div style={styles.brandSection}>
           <div style={styles.logo}>
             <Gavel size={32} color="#dc2626" />
-            <span style={styles.brandName}>Homley CRM</span>
+            <span style={styles.brandName}>VirtualBid</span>
           </div>
           <div style={styles.heroContent}>
             <h1 style={styles.heroTitle}>
               Welcome to the Future of Online Auctions
             </h1>
             <p style={styles.heroSubtitle}>
-              Discover unique properties, participate in live auctions, and find your dream home with our cutting-edge platform.
+              Discover unique properties, participate in live auctions, and find your dream item with our cutting-edge platform.
             </p>
             <div style={styles.featureList}>
               <div style={styles.feature}>
@@ -223,7 +221,7 @@ const AuthSystem = () => {
               </div>
               <div style={styles.feature}>
                 <CheckCircle size={20} color="#10b981" />
-                <span>Professional property verification</span>
+                <span>Professional item verification</span>
               </div>
             </div>
           </div>
