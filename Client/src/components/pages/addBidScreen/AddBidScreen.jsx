@@ -522,6 +522,7 @@ const handleSubmit = async () => {
                     </p>
                 </div>
 
+                {/* Winner Cards */}
                 {loadingAuctions ? (
                     <div style={{ 
                         textAlign: 'center', 
@@ -753,6 +754,163 @@ const handleSubmit = async () => {
                                 </div>
                             </div>
                         ))}
+                    </div>
+                )}
+
+                {/* No Winner Cards Section */}
+                {userAuctions.filter(auction => !auction.hasWinner && auction.status === 'ended').length > 0 && (
+                    <div style={{ marginTop: '2rem' }}>
+                        <div style={{ 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            gap: '0.5rem',
+                            marginBottom: '1rem'
+                        }}>
+                            <Award size={20} color="#9ca3af" />
+                            <span style={{ fontWeight: 600, fontSize: '1.1rem', color: '#374151' }}>Your Ended Auctions (No Winner)</span>
+                        </div>
+                        <div style={{ 
+                            display: 'grid', 
+                            gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', 
+                            gap: '1.5rem' 
+                        }}>
+                            {userAuctions.filter(auction => !auction.hasWinner && auction.status === 'ended').map((auction) => (
+                                <div
+                                    key={auction._id}
+                                    style={{
+                                        backgroundColor: 'white',
+                                        borderRadius: '16px',
+                                        overflow: 'hidden',
+                                        boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
+                                        border: '1px solid #e5e7eb',
+                                        transition: 'all 0.3s ease',
+                                        cursor: 'default'
+                                    }}
+                                >
+                                    {/* Card Header */}
+                                    <div style={{ 
+                                        padding: '20px 24px 16px',
+                                        borderBottom: '1px solid #f3f4f6'
+                                    }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                            <div style={{ flex: 1 }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                                                    <div style={{
+                                                        width: '48px',
+                                                        height: '48px',
+                                                        borderRadius: '8px',
+                                                        overflow: 'hidden',
+                                                        backgroundColor: '#f3f4f6',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center'
+                                                    }}>
+                                                        {auction.imagePath && auction.imagePath !== 'uploads/default-property.jpg' ? (
+                                                            <img 
+                                                                src={`http://localhost:3000/${auction.imagePath}`} 
+                                                                alt={auction.title}
+                                                                style={{
+                                                                    width: '100%',
+                                                                    height: '100%',
+                                                                    objectFit: 'cover'
+                                                                }}
+                                                            />
+                                                        ) : (
+                                                            <Eye size={24} color="#9ca3af" />
+                                                        )}
+                                                    </div>
+                                                    <div>
+                                                        <h3 style={{ 
+                                                            fontSize: '18px', 
+                                                            fontWeight: '600', 
+                                                            color: '#1f2937',
+                                                            margin: 0,
+                                                            marginBottom: '4px'
+                                                        }}>
+                                                            {auction.title}
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                                <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
+                                                    <span style={{
+                                                        backgroundColor: '#f3f4f6',
+                                                        color: '#374151',
+                                                        padding: '4px 8px',
+                                                        borderRadius: '6px',
+                                                        fontSize: '12px',
+                                                        fontWeight: '500'
+                                                    }}>
+                                                        {auction.status}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                                                <div style={{
+                                                    padding: '4px 12px',
+                                                    borderRadius: '20px',
+                                                    fontSize: '12px',
+                                                    fontWeight: '600',
+                                                    textTransform: 'uppercase',
+                                                    backgroundColor: '#9ca3af',
+                                                    color: 'white'
+                                                }}>
+                                                    No Winner
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {/* Card Body */}
+                                    <div style={{ padding: '20px 24px' }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+                                            <div>
+                                                <p style={{ color: '#6b7280', fontSize: '12px', margin: 0, marginBottom: '4px' }}>
+                                                    Starting Bid
+                                                </p>
+                                                <p style={{ 
+                                                    fontSize: '16px', 
+                                                    fontWeight: '600', 
+                                                    color: '#1f2937',
+                                                    margin: 0
+                                                }}>
+                                                    ${auction.startingBid?.toLocaleString()}
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <p style={{ color: '#6b7280', fontSize: '12px', margin: 0, marginBottom: '4px' }}>
+                                                    Total Bids
+                                                </p>
+                                                <p style={{ 
+                                                    fontSize: '16px', 
+                                                    fontWeight: '600', 
+                                                    color: '#1f2937',
+                                                    margin: 0
+                                                }}>
+                                                    {auction.totalBids || 0}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                <Clock size={14} color="#6b7280" />
+                                                <span style={{ fontSize: '12px', color: '#6b7280' }}>
+                                                    {new Date(auction.endTime).toLocaleDateString('en-US', {
+                                                        month: 'short',
+                                                        day: 'numeric',
+                                                        year: 'numeric'
+                                                    })}
+                                                </span>
+                                            </div>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                <TrendingUp size={14} color="#6b7280" />
+                                                <span style={{ fontSize: '12px', color: '#6b7280' }}>
+                                                    {auction.totalBids || 0} bids
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 )}
             </div>
