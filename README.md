@@ -260,8 +260,7 @@ View the full test report in `COMPREHENSIVE_TEST_REPORT.md`
 ## 📞 Support
 
 If you encounter any issues or have questions:
-Contact me
-
+Contact me https://github.com/gokulg14/gokulg14
 ---
 
 **Made with ❤️ by Gokul an Aspiring Full Stack Developer**
