@@ -15,7 +15,6 @@ A modern, full-stack auction platform built with React and Node.js that allows u
 - [Security Features](#-security-features)
 - [Testing](#-testing)
 - [Screenshots](#-screenshots)
-- [Contributing](#-contributing)
 
 ## ✨ Features
 
@@ -244,23 +243,6 @@ View the full test report in `COMPREHENSIVE_TEST_REPORT.md`
 <img width="1880" height="917" alt="Screenshot 2025-06-30 003309" src="https://github.com/user-attachments/assets/e3d78bbc-e600-47ab-86d1-2102b396896b" />
 
 <img width="1889" height="919" alt="Screenshot 2025-06-30 003235" src="https://github.com/user-attachments/assets/e8c637a5-55e0-4149-8c85-a700fee4e18f" />
-
-## 🤝 Contributing
-
-1. **Fork the repository**
-2. **Create a feature branch**
-   ```bash
-   git checkout -b feature/amazing-feature
-   ```
-3. **Commit your changes**
-   ```bash
-   git commit -m 'Add some amazing feature'
-   ```
-4. **Push to the branch**
-   ```bash
-   git push origin feature/amazing-feature
-   ```
-5. **Open a Pull Request**
 
 ### Development Guidelines
 - Follow the existing code style
