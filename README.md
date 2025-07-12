@@ -260,13 +260,10 @@ View the full test report in `COMPREHENSIVE_TEST_REPORT.md`
 ## 📞 Support
 
 If you encounter any issues or have questions:
-
-1. Check the [Issues](https://github.com/yourusername/VirtualBid/issues) page
-2. Create a new issue with detailed information
-3. Contact the development team
+Contact me
 
 ---
 
-**Made with ❤️ by the VirtualBid Team**
+**Made with ❤️ by Gokul an Aspiring Full Stack Developer**
 
 *An innovative auction platform for the digital age*
