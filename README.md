@@ -16,7 +16,6 @@ A modern, full-stack auction platform built with React and Node.js that allows u
 - [Testing](#-testing)
 - [Screenshots](#-screenshots)
 - [Contributing](#-contributing)
-- [License](#-license)
 
 ## ✨ Features
 
@@ -268,10 +267,6 @@ View the full test report in `COMPREHENSIVE_TEST_REPORT.md`
 - Add tests for new features
 - Update documentation as needed
 - Ensure all tests pass before submitting
-
-## 📝 License
-
-This project is licensed under the ISC License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
