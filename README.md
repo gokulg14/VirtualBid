@@ -244,11 +244,6 @@ View the full test report in `COMPREHENSIVE_TEST_REPORT.md`
 
 <img width="1889" height="919" alt="Screenshot 2025-06-30 003235" src="https://github.com/user-attachments/assets/e8c637a5-55e0-4149-8c85-a700fee4e18f" />
 
-### Development Guidelines
-- Follow the existing code style
-- Add tests for new features
-- Update documentation as needed
-- Ensure all tests pass before submitting
 
 ## 🙏 Acknowledgments
 
