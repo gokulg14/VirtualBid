@@ -14,6 +14,7 @@ A modern, full-stack auction platform built with React and Node.js that allows u
 - [API Endpoints](#-api-endpoints)
 - [Security Features](#-security-features)
 - [Testing](#-testing)
+- [Screenshots](#-screenshots)
 - [Contributing](#-contributing)
 - [License](#-license)
 
@@ -230,6 +231,20 @@ The project includes a comprehensive test suite covering:
 - Performance metrics
 
 View the full test report in `COMPREHENSIVE_TEST_REPORT.md`
+
+## 📸 Screenshots
+
+<img width="1881" height="915" alt="Screenshot 2025-06-30 112153" src="https://github.com/user-attachments/assets/88589469-b617-40ea-84dd-4a385c3db7e8" />
+
+<img width="1883" height="922" alt="Screenshot 2025-06-30 111537" src="https://github.com/user-attachments/assets/6419a9bb-86a6-4206-aed6-c1db8c67b10d" />
+
+<img width="1885" height="915" alt="Screenshot 2025-06-30 003434" src="https://github.com/user-attachments/assets/552c233e-dd3d-49c8-af60-c66bf5f89cb2" />
+
+<img width="1880" height="915" alt="Screenshot 2025-06-30 003402" src="https://github.com/user-attachments/assets/a42c938b-bf3a-409f-9cd2-9544ef7114f0" />
+
+<img width="1880" height="917" alt="Screenshot 2025-06-30 003309" src="https://github.com/user-attachments/assets/e3d78bbc-e600-47ab-86d1-2102b396896b" />
+
+<img width="1889" height="919" alt="Screenshot 2025-06-30 003235" src="https://github.com/user-attachments/assets/e8c637a5-55e0-4149-8c85-a700fee4e18f" />
 
 ## 🤝 Contributing
 
